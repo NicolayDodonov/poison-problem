@@ -1,9 +1,48 @@
 package model
 
-//todo: struct agent
+// todo: struct agent
+type Agent struct {
+	ID     int
+	Energy uint
+	Look   uint
+	Cords  Cords
+	Sings  Sings
+}
 
-//todo: move()
+type Cords struct {
+	X uint
+	Y uint
+}
 
-//todo: eat()
+type Sings struct {
+	//todo: sing parameters
+}
 
-//todo: poison()
+func (a *Agent) Run() {
+
+}
+
+// move change cords agent to vector
+func (a *Agent) move() {
+
+}
+
+// look can search nearby object and change vector
+func (a *Agent) look() {
+
+}
+
+// eat destroy resource
+func (a *Agent) eat() {
+
+}
+
+// clean destroy poison
+func (a *Agent) clean() {
+
+}
+
+// death kill this Agent
+func (a *Agent) death() {
+
+}
