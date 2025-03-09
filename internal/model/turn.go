@@ -22,63 +22,79 @@ type Cords struct {
 	Y int
 }
 
-// setCoordsToTurns change Cords with turn factor
-func (c *Cords) setCoordsToTurns(t turn) {
+// getCordsOnView base change coords
+func (c *Cords) getCordsOnView(t turn) *Cords {
+	n := Cords{
+		c.X,
+		c.Y,
+	}
 	switch t % 8 {
 	case 0:
-		c.X--
+		n.X--
 	case 1:
-		c.X--
-		c.Y--
+		n.X--
+		n.Y--
 	case 2:
-		c.Y--
+		n.Y--
 	case 3:
-		c.X++
-		c.Y--
+		n.X++
+		n.Y--
 	case 4:
-		c.X++
+		n.X++
 	case 5:
-		c.X++
-		c.Y++
+		n.X++
+		n.Y++
 	case 6:
-		c.Y++
+		n.Y++
 	case 7:
-		c.X--
-		c.Y++
+		n.X--
+		n.Y++
 	}
+	return &n
 }
 
-func (c *Cords) setCordsToTurnsWithWorld(t turn, w *World) {
-	//copy cords to nCords
-	nCord := &Cords{
+//todo: change cords with t and w
+
+func (c *Cords) getCordsOnViewWithWorld(t turn, w *World) *Cords {
+	n := Cords{
 		c.X,
 		c.Y,
 	}
+	switch t % 8 {
+	case 0:
+		n.X--
+	case 1:
+		n.X--
+		n.Y--
+	case 2:
+		n.Y--
+	case 3:
+		n.X++
+		n.Y--
+	case 4:
+		n.X++
+	case 5:
+		n.X++
+		n.Y++
+	case 6:
+		n.Y++
+	case 7:
+		n.X--
+		n.Y++
+	}
 
-	nCord.setCoordsToTurns(t)
-	//nCords fix with world.MaxN
-	if nCord.X > w.MaxX {
-		nCord.X = nCord.X % w.MaxX
+	if n.X > w.MaxX {
+		n.X = n.X % w.MaxX
 	}
-	if nCord.X < 0 {
-		nCord.X = w.MaxX + nCord.X
+	if n.X < 0 {
+		n.X = w.MaxX + n.X
 	}
-	if nCord.Y > w.MaxY {
-		nCord.Y = nCord.Y % w.MaxY
+	if n.Y > w.MaxY {
+		n.Y = n.Y % w.MaxY
 	}
-	if nCord.Y < 0 {
-		nCord.Y = w.MaxY + nCord.Y
+	if n.Y < 0 {
+		n.Y = w.MaxY + n.Y
 	}
 
-	c.X = nCord.X
-	c.Y = nCord.Y
-}
-
-// multiplyCordOnTurns copy Cords with turn factor
-func multiplyCordOnTurns(t turn, c Cords) *Cords {
-	c.setCoordsToTurns(t)
-	return &Cords{
-		c.X,
-		c.Y,
-	}
+	return &n
 }

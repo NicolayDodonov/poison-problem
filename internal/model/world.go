@@ -57,7 +57,7 @@ func (w *World) clear() {
 }
 
 // setValue get food and poison count in range [0,maxInt).
-// value less then 0 ignored.
+// value less than 0 ignored.
 func (w *World) setValue(food, poison int, c Cords) {
 	if food > -1 {
 		w.Map[c.Y][c.X].FoodLevel = food
@@ -67,7 +67,7 @@ func (w *World) setValue(food, poison int, c Cords) {
 	}
 }
 
-func (w *World) getCell(c Cords) (*Cell, error) {
+func (w *World) getCell(c *Cords) (*Cell, error) {
 	if c.Y > w.MaxY || c.Y < 0 {
 		return nil, fmt.Errorf("out of range: Y coord's")
 	}

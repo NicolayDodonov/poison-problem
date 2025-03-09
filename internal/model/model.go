@@ -1,9 +1,12 @@
 package model
 
+import "poison-problem/internal/logger"
+
 type Model struct {
 	Agents []*Agent
 	*World
 	*Statistic
+	*logger.Logger
 }
 
 func New() *Model {
@@ -24,7 +27,7 @@ func (m *Model) Run() {
 	for _, agent := range m.Agents {
 		err := agent.Run(m.World)
 		if err != nil {
-			//todo: l.ERROR(err)
+			m.Error(err.Error())
 		}
 	}
 
