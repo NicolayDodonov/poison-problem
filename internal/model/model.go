@@ -2,8 +2,8 @@ package model
 
 type Model struct {
 	Agents []*Agent
-	World
-	Statistic
+	*World
+	*Statistic
 }
 
 func New() *Model {
@@ -16,9 +16,16 @@ func New() *Model {
 	return &Model{}
 }
 
+// Run проводит исследование отдельной группы агентов на заданные условия мира в
+// структуре модели. После завершения моделирования, выводит какие то результаты
+// во вне. //todo: определить что будем возвращать
+// todo: add context
 func (m *Model) Run() {
 	for _, agent := range m.Agents {
-		agent.Run()
+		err := agent.Run(m.World)
+		if err != nil {
+			//todo: l.ERROR(err)
+		}
 	}
 
 	//todo: m.spawnFood()

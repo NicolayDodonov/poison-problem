@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"math/rand"
 )
 
@@ -38,10 +39,10 @@ func (w *World) spawnFood(count int) {
 			break
 		}
 		cords := Cords{
-			uint(rand.Intn(w.MaxX)),
-			uint(rand.Intn(w.MaxY)),
+			rand.Intn(w.MaxX),
+			rand.Intn(w.MaxY),
 		}
-		w.setValue(1, -1, cords)
+		w.setValue(10, -1, cords)
 		count--
 	}
 }
@@ -64,4 +65,14 @@ func (w *World) setValue(food, poison int, c Cords) {
 	if poison > -1 {
 		w.Map[c.Y][c.X].PoisonLevel = poison
 	}
+}
+
+func (w *World) getCell(c Cords) (*Cell, error) {
+	if c.Y > w.MaxY || c.Y < 0 {
+		return nil, fmt.Errorf("out of range: Y coord's")
+	}
+	if c.X > w.MaxX || c.X < 0 {
+		return nil, fmt.Errorf("out of range: X coord's")
+	}
+	return w.Map[c.Y][c.X], nil
 }
