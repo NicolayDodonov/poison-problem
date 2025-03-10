@@ -1,12 +1,15 @@
 package model
 
-import "poison-problem/internal/logger"
+import (
+	"context"
+	"fmt"
+	"poison-problem/internal/logger"
+)
 
 type Model struct {
 	Agents []*Agent
 	*World
 	*Statistic
-	*logger.Logger
 }
 
 func New() *Model {
@@ -22,23 +25,37 @@ func New() *Model {
 // Run проводит исследование отдельной группы агентов на заданные условия мира в
 // структуре модели. После завершения моделирования, выводит какие то результаты
 // во вне. //todo: определить что будем возвращать
-// todo: add context
-func (m *Model) Run() {
-	for _, agent := range m.Agents {
-		err := agent.Run(m.World)
-		if err != nil {
-			m.Error(err.Error())
+func (m *Model) Run(ctx context.Context, logger *logger.Logger) {
+	for {
+		//update world resources
+		m.resourceHandler()
+
+		//run all agent
+		for _, agent := range m.Agents {
+			err := agent.Run(m.World)
+			if err != nil {
+				logger.Error(fmt.Errorf("Agent ID", err).Error())
+			}
+		}
+
+		//update model stat
+		m.statHandler()
+
+		//todo: ch <- some info
+
+		//handle ctx event
+		select {
+		case <-ctx.Done():
+		default:
 		}
 	}
-
-	//todo: m.spawnFood()
-
-	//todo: clear() ?
-
-	m.updateStat()
 }
 
-func (m *Model) updateStat() {
+func (m *Model) resourceHandler() {
+	//todo: make smart spawn resource system
+}
+
+func (m *Model) statHandler() {
 	food := 0
 	poison := 0
 	for _, cells := range m.Map {

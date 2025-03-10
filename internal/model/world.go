@@ -2,7 +2,6 @@ package model
 
 import (
 	"fmt"
-	"math/rand"
 )
 
 type World struct {
@@ -31,20 +30,6 @@ func NewWorld(x, y int) *World {
 		}
 	}
 	return &World{x, y, 0, Map}
-}
-
-func (w *World) spawnFood(count int) {
-	for {
-		if count <= 0 {
-			break
-		}
-		cords := Cords{
-			rand.Intn(w.MaxX),
-			rand.Intn(w.MaxY),
-		}
-		w.setValue(10, -1, cords)
-		count--
-	}
 }
 
 func (w *World) clear() {
