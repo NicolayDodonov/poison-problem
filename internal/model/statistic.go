@@ -6,11 +6,13 @@ type Statistic struct {
 	Food      int
 	Poison    int
 	AvgEnergy int
+	Year      int
 	Sings
 }
 
 func (s *Statistic) String() string {
-	str := strconv.Itoa(s.Food) + "; " +
+	str := strconv.Itoa(s.Year) + "; " +
+		strconv.Itoa(s.Food) + "; " +
 		strconv.Itoa(s.Poison) + "; " +
 		strconv.Itoa(s.moveOrAction) + "; " +
 		strconv.Itoa(s.turnOrMove) + "; " +

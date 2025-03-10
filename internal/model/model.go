@@ -37,6 +37,7 @@ func New(countAgent, worldX, worldY int, sings ...*Sings) *Model {
 			0,
 			0,
 			0,
+			0,
 			Sings{
 				0, 0, 0, [2]int{0, 0}, 0, 0, 0,
 			},
@@ -70,6 +71,7 @@ func (m *Model) Run(ctx context.Context, logger *logger.Logger, targetCountAgent
 		if liveAgent <= targetCountAgent {
 			break
 		}
+		m.Statistic.Year++
 	}
 	//update model stat
 	m.statisticHandler()
@@ -133,4 +135,11 @@ func (m *Model) statisticHandler() {
 	m.getFood /= len(m.Agents)
 	m.getPoison /= len(m.Agents)
 	m.makePoison /= len(m.Agents)
+}
+
+func (m *Model) fitnessFunction() {
+	//todo: get sings best agent.age
+	//todo: delete old agent
+	//todo: make new agent with best sings
+	//todo: mutation sings
 }

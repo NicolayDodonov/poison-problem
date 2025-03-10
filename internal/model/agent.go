@@ -9,6 +9,7 @@ import (
 type Agent struct {
 	ID     int
 	Energy int
+	Age    int
 	Look   turn  //0 to 8
 	Cords  Cords //x y
 	Sings        //small gen model
@@ -28,6 +29,7 @@ func NewAgent(MaxX, MaxY int, s *Sings) *Agent {
 	return &Agent{
 		time.Now().Nanosecond(),
 		100,
+		0,
 		0,
 		Cords{
 			rand.IntN(MaxX),
@@ -145,7 +147,7 @@ func (a *Agent) pollute(w *World) error {
 	}
 }
 
-func (a *Agent) mutation(mutation int) {
+func (s *Sings) mutation(mutation int) {
 	/*
 		0 	moveOrAction int    //determinate gone of cell or make some action
 		1 	turnOrMove   int    //determinate make turns or go ahead
@@ -165,68 +167,68 @@ func (a *Agent) mutation(mutation int) {
 
 		switch rand.IntN(8) {
 		case 0:
-			a.moveOrAction += n
-			if a.moveOrAction < 0 {
-				a.moveOrAction = 0
+			s.moveOrAction += n
+			if s.moveOrAction < 0 {
+				s.moveOrAction = 0
 			}
-			if a.moveOrAction > 100 {
-				a.moveOrAction = 100
+			if s.moveOrAction > 100 {
+				s.moveOrAction = 100
 			}
 		case 1:
-			a.turnOrMove += n
-			if a.turnOrMove < 0 {
-				a.turnOrMove = 0
+			s.turnOrMove += n
+			if s.turnOrMove < 0 {
+				s.turnOrMove = 0
 			}
-			if a.turnOrMove > 99 {
-				a.turnOrMove = 99
+			if s.turnOrMove > 99 {
+				s.turnOrMove = 99
 			}
 		case 2:
-			a.leftOrRight += n
-			if a.leftOrRight < 0 {
-				a.leftOrRight = 0
+			s.leftOrRight += n
+			if s.leftOrRight < 0 {
+				s.leftOrRight = 0
 			}
-			if a.leftOrRight > 99 {
-				a.leftOrRight = 99
+			if s.leftOrRight > 99 {
+				s.leftOrRight = 99
 			}
 		case 3:
-			a.eatOrClear[0] += n
-			if a.eatOrClear[0] < 0 {
-				a.eatOrClear[0] = 0
+			s.eatOrClear[0] += n
+			if s.eatOrClear[0] < 0 {
+				s.eatOrClear[0] = 0
 			}
-			if a.eatOrClear[0] > a.eatOrClear[1] {
-				a.eatOrClear[0] = a.eatOrClear[1] - 1
+			if s.eatOrClear[0] > s.eatOrClear[1] {
+				s.eatOrClear[0] = s.eatOrClear[1] - 1
 			}
 		case 4:
-			a.eatOrClear[1] += n
-			if a.eatOrClear[1] < a.eatOrClear[0] {
-				a.eatOrClear[1] = a.eatOrClear[0] + 1
+			s.eatOrClear[1] += n
+			if s.eatOrClear[1] < s.eatOrClear[0] {
+				s.eatOrClear[1] = s.eatOrClear[0] + 1
 			}
-			if a.eatOrClear[1] > 99 {
-				a.eatOrClear[1] = 99
+			if s.eatOrClear[1] > 99 {
+				s.eatOrClear[1] = 99
 			}
 		case 5:
-			a.getFood += n
-			if a.getFood < 10 {
-				a.getFood = 10
+			s.getFood += n
+			if s.getFood < 10 {
+				s.getFood = 10
 			}
-			if a.getFood > 100 {
-				a.getFood = 100
+			if s.getFood > 100 {
+				s.getFood = 100
 			}
 		case 6:
-			a.getPoison += n
-			if a.getPoison < 10 {
-				a.getPoison = 10
+			s.getPoison += n
+			if s.getPoison < 10 {
+				s.getPoison = 10
 			}
-			if a.getPoison > 100 {
-				a.getPoison = 100
+			if s.getPoison > 100 {
+				s.getPoison = 100
 			}
 		case 7:
-			a.makePoison += n
-			if a.makePoison < 10 {
-				a.makePoison = 10
+			s.makePoison += n
+			if s.makePoison < 10 {
+				s.makePoison = 10
 			}
-			if a.makePoison > 100 {
-				a.makePoison = 100
+			if s.makePoison > 100 {
+				s.makePoison = 100
 			}
 		}
 	}
