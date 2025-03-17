@@ -1,15 +1,39 @@
 package simulation
 
-import "poison-problem/internal/logger"
+import (
+	"context"
+	"poison-problem/internal/logger"
+	"poison-problem/internal/model"
+)
 
-//todo sim struct
-
+// todo: sim struct
 type Simulation struct {
 	l logger.Logger
 	//todo: other parameters
 }
 
-// todo: run()
 func (s Simulation) Run() {
-	//todo: for { go m.Run() }
+	for {
+		//model = New()
+		m := model.New(100, 20, 20,
+			&model.Sings{
+				50,
+				50,
+				50,
+				[2]int{25, 75},
+				30,
+				30,
+				5,
+			},
+		)
+		//model.Run
+		m.Run(context.TODO(), &s.l, 8)
+		//model.SaveStat
+		m.SaveStatistic()
+		//model.Fitness
+		m.Fitness()
+
+		//todo: Exit conditions
+	}
+
 }

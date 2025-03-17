@@ -14,13 +14,13 @@ func (s *Statistic) String() string {
 	str := strconv.Itoa(s.Year) + "; " +
 		strconv.Itoa(s.Food) + "; " +
 		strconv.Itoa(s.Poison) + "; " +
-		strconv.Itoa(s.moveOrAction) + "; " +
-		strconv.Itoa(s.turnOrMove) + "; " +
-		strconv.Itoa(s.leftOrRight) + "; " +
-		strconv.Itoa(s.eatOrClear[0]) + "; " +
-		strconv.Itoa(s.eatOrClear[1]) + "; " +
-		strconv.Itoa(s.getFood) + "; " +
-		strconv.Itoa(s.getPoison) + "; " +
-		strconv.Itoa(s.makePoison) + "; "
+		strconv.Itoa(s.MoveOrAction) + "; " +
+		strconv.Itoa(s.TurnOrMove) + "; " +
+		strconv.Itoa(s.LeftOrRight) + "; " +
+		strconv.Itoa(s.EatOrClear[0]) + "; " +
+		strconv.Itoa(s.EatOrClear[1]) + "; " +
+		strconv.Itoa(s.GetFood) + "; " +
+		strconv.Itoa(s.GetPoison) + "; " +
+		strconv.Itoa(s.MakePoison) + "; "
 	return str
 }

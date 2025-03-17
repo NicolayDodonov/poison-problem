@@ -77,6 +77,18 @@ func (m *Model) Run(ctx context.Context, logger *logger.Logger, targetCountAgent
 	m.statisticHandler()
 }
 
+func (m *Model) Fitness() {
+	//todo: get sings best agent.age
+	//todo: sort Agent to age
+	//todo: delete old agent
+	//todo: make new agent with best sings
+	//todo: mutation sings
+}
+
+func (m *Model) SaveStatistic() {
+	//todo: save Statistic in any place( log-file stat-file other-file)
+}
+
 func (m *Model) resourceHandler() {
 	for _, cells := range m.Map {
 		for _, cell := range cells {
@@ -117,29 +129,22 @@ func (m *Model) statisticHandler() {
 	}
 	//sum sings parameters from agents
 	for _, agent := range m.Agents {
-		m.moveOrAction += agent.moveOrAction
-		m.turnOrMove += agent.turnOrMove
-		m.leftOrRight += agent.leftOrRight
-		m.eatOrClear[0] += agent.eatOrClear[0]
-		m.eatOrClear[1] += agent.eatOrClear[1]
-		m.getFood += agent.getFood
-		m.getPoison += agent.getPoison
-		m.makePoison += agent.makePoison
+		m.MoveOrAction += agent.MoveOrAction
+		m.TurnOrMove += agent.TurnOrMove
+		m.LeftOrRight += agent.LeftOrRight
+		m.EatOrClear[0] += agent.EatOrClear[0]
+		m.EatOrClear[1] += agent.EatOrClear[1]
+		m.GetFood += agent.GetFood
+		m.GetPoison += agent.GetPoison
+		m.MakePoison += agent.MakePoison
 	}
 	//and make avg count of all sings parameters
-	m.moveOrAction /= len(m.Agents)
-	m.turnOrMove /= len(m.Agents)
-	m.leftOrRight /= len(m.Agents)
-	m.eatOrClear[0] /= len(m.Agents)
-	m.eatOrClear[1] /= len(m.Agents)
-	m.getFood /= len(m.Agents)
-	m.getPoison /= len(m.Agents)
-	m.makePoison /= len(m.Agents)
-}
-
-func (m *Model) fitnessFunction() {
-	//todo: get sings best agent.age
-	//todo: delete old agent
-	//todo: make new agent with best sings
-	//todo: mutation sings
+	m.MoveOrAction /= len(m.Agents)
+	m.TurnOrMove /= len(m.Agents)
+	m.LeftOrRight /= len(m.Agents)
+	m.EatOrClear[0] /= len(m.Agents)
+	m.EatOrClear[1] /= len(m.Agents)
+	m.GetFood /= len(m.Agents)
+	m.GetPoison /= len(m.Agents)
+	m.MakePoison /= len(m.Agents)
 }

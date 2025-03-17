@@ -1,1 +1,9 @@
-//todo config
+# Конфиг приложения
+env: "local"
+# Настройка конфига
+logger:
+  type: "Error"
+  path: "logs/app.log"
+# Настройка Симуляции
+simulation:
+  count: 100 # idn
