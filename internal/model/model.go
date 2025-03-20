@@ -89,6 +89,15 @@ func (m *Model) SaveStatistic() {
 	//todo: save Statistic in any place( log-file stat-file other-file)
 }
 
+func (m *Model) CheckTargetAge(target int) bool {
+	for _, agent := range m.Agents {
+		if agent.Age >= target {
+			return true
+		}
+	}
+	return false
+}
+
 func (m *Model) resourceHandler() {
 	for _, cells := range m.Map {
 		for _, cell := range cells {
