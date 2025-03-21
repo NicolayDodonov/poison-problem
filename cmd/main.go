@@ -1,20 +1,20 @@
 package main
 
-import "poison-problem/internal/logger"
+import (
+	c "poison-problem/internal/config"
+	l "poison-problem/internal/logger"
+	s "poison-problem/internal/simulation"
+)
 
 func main() {
-	//todo: init config
 
-	//todo: init logger
-	l := logger.New()
-	//todo: init simulation
+	Config := c.MustInit("config/config.yaml")
 
-	//todo: simulation.run()
+	Logger := l.New(
+		Config.Logger.Path,
+		Config.Logger.Type)
 
-	//or
+	Simulation := s.New(Logger, &Config.Simulation)
 
-	//todo: go simulation1.run
-	//todo: go simulation2.run
-
-	_ = l
+	Simulation.Run()
 }

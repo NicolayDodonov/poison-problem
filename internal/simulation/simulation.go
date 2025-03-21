@@ -2,14 +2,21 @@ package simulation
 
 import (
 	"context"
+	"poison-problem/internal/config"
 	"poison-problem/internal/logger"
 	"poison-problem/internal/model"
 )
 
-// todo: sim struct
 type Simulation struct {
-	l *logger.Logger
-	//todo: other parameters
+	Conf *config.Simulation
+	Log  *logger.Logger
+}
+
+func New(logger *logger.Logger, Conf *config.Simulation) *Simulation {
+	return &Simulation{
+		Conf,
+		logger,
+	}
 }
 
 func (s Simulation) Run() {
@@ -23,10 +30,12 @@ func (s Simulation) Run() {
 		50,
 		50,
 	}
-	if true {
-		s.train(300, sing)
-	} else {
-		s.experiment(300)
+
+	switch s.Conf.Type {
+	case "Train":
+		s.train(s.Conf.TargetAge, sing)
+	case "Experiment":
+		s.experiment(s.Conf.MaxEpoch)
 	}
 }
 
@@ -34,14 +43,14 @@ func (s Simulation) train(targetAge int, sings *model.Sings) {
 	for {
 		// make model to train sings
 		m := model.New(
-			100,
+			s.Conf.StartAgent,
 			20,
 			20,
 			sings)
 
 		// run one epoch model
 		// epoch end if all agent ded
-		m.Run(context.TODO(), s.l, 8)
+		m.Run(context.TODO(), s.Log, s.Conf.EndAgent)
 
 		// after end epoch - save statistic in file
 		//todo: make special struct (not in model) or func to save this data
@@ -74,7 +83,7 @@ func (s Simulation) experiment(maxEpoch int) {
 		)
 		_ = m //todo: delete
 
-		m.Run(context.TODO(), s.l, 0)
+		m.Run(context.TODO(), s.Log, 0)
 
 		//get ifo about of all sings group
 		//todo: m.GetCountStatistic

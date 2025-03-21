@@ -1,9 +1,22 @@
-# Конфиг приложения
-env: "local"
 # Настройка конфига
 logger:
+  # тип логгера Debug|Info|Error|Off
   type: "Error"
+  # путь к сохранению логов
   path: "logs/app.log"
 # Настройка Симуляции
 simulation:
-  count: 100 # idn
+  # тип симуляции Train|Experiment
+  type: "train"
+  # до какого возраста обучать
+  targetAge: 100
+  # колличество агентов для обучения
+  startCountAgent: 64
+  # колличество лучших в эпохе
+  endCountAgent: 8
+  # сколько эпох длится эксперимент
+  maxCountEpoch: 1000
+  # пути сохранения данных
+  pathLoadSing: ""
+  pathSaveSing: ""
+  pathSaveStat: ""
