@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	Config := c.MustInit("config/config.yaml")
+	Config := c.MustInit("configs/config.yaml")
 
 	Logger := l.New(
 		Config.Logger.Path,

@@ -7,7 +7,6 @@ import (
 type World struct {
 	MaxX int
 	MaxY int
-	Year int
 	Map  Map //y, x
 }
 
@@ -29,7 +28,7 @@ func NewWorld(x, y int) *World {
 			}
 		}
 	}
-	return &World{x, y, 0, Map}
+	return &World{x, y, Map}
 }
 
 func (w *World) clear() {
@@ -53,10 +52,10 @@ func (w *World) setValue(food, poison int, c Cords) {
 }
 
 func (w *World) getCell(c *Cords) (*Cell, error) {
-	if c.Y > w.MaxY || c.Y < 0 {
+	if c.Y > w.MaxY-1 || c.Y < 0 {
 		return nil, fmt.Errorf("out of range: Y coord's")
 	}
-	if c.X > w.MaxX || c.X < 0 {
+	if c.X > w.MaxX-1 || c.X < 0 {
 		return nil, fmt.Errorf("out of range: X coord's")
 	}
 	return w.Map[c.Y][c.X], nil

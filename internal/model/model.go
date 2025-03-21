@@ -71,10 +71,11 @@ func (m *Model) Run(ctx context.Context, logger *logger.Logger, targetCountAgent
 		if liveAgent <= targetCountAgent {
 			break
 		}
+		//update model stat
+		m.statisticHandler(false)
 		m.Statistic.Year++
 	}
-	//update model stat
-	m.statisticHandler()
+	m.statisticHandler(true)
 }
 
 func (m *Model) Fitness() {
@@ -115,7 +116,7 @@ func (m *Model) resourceHandler() {
 }
 
 // statisticHandler update information about
-func (m *Model) statisticHandler() {
+func (m *Model) statisticHandler(updateGlobal bool) {
 	food := 0
 	poison := 0
 	for _, cells := range m.Map {
@@ -127,33 +128,46 @@ func (m *Model) statisticHandler() {
 	m.Statistic.Food = food
 	m.Statistic.Poison = poison
 
-	m.Statistic.Sings = Sings{
-		0,
-		0,
-		0,
-		[2]int{0, 0},
-		0,
-		0,
-		0,
-	}
-	//sum sings parameters from agents
+	sum := 0
+	count := 0
 	for _, agent := range m.Agents {
-		m.MoveOrAction += agent.MoveOrAction
-		m.TurnOrMove += agent.TurnOrMove
-		m.LeftOrRight += agent.LeftOrRight
-		m.EatOrClear[0] += agent.EatOrClear[0]
-		m.EatOrClear[1] += agent.EatOrClear[1]
-		m.GetFood += agent.GetFood
-		m.GetPoison += agent.GetPoison
-		m.MakePoison += agent.MakePoison
+		if agent.Energy > 0 {
+			sum += agent.Energy
+			count++
+		}
+
 	}
-	//and make avg count of all sings parameters
-	m.MoveOrAction /= len(m.Agents)
-	m.TurnOrMove /= len(m.Agents)
-	m.LeftOrRight /= len(m.Agents)
-	m.EatOrClear[0] /= len(m.Agents)
-	m.EatOrClear[1] /= len(m.Agents)
-	m.GetFood /= len(m.Agents)
-	m.GetPoison /= len(m.Agents)
-	m.MakePoison /= len(m.Agents)
+	m.Statistic.AvgEnergy = sum / count
+
+	if updateGlobal {
+		m.Statistic.Sings = Sings{
+			0,
+			0,
+			0,
+			[2]int{0, 0},
+			0,
+			0,
+			0,
+		}
+		//sum sings parameters from agents
+		for _, agent := range m.Agents {
+			m.MoveOrAction += agent.MoveOrAction
+			m.TurnOrMove += agent.TurnOrMove
+			m.LeftOrRight += agent.LeftOrRight
+			m.EatOrClear[0] += agent.EatOrClear[0]
+			m.EatOrClear[1] += agent.EatOrClear[1]
+			m.GetFood += agent.GetFood
+			m.GetPoison += agent.GetPoison
+			m.MakePoison += agent.MakePoison
+		}
+		//and make avg count of all sings parameters
+		m.MoveOrAction /= len(m.Agents)
+		m.TurnOrMove /= len(m.Agents)
+		m.LeftOrRight /= len(m.Agents)
+		m.EatOrClear[0] /= len(m.Agents)
+		m.EatOrClear[1] /= len(m.Agents)
+		m.GetFood /= len(m.Agents)
+		m.GetPoison /= len(m.Agents)
+		m.MakePoison /= len(m.Agents)
+	}
 }

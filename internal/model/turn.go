@@ -10,11 +10,11 @@ package model
 type turn int
 
 func (t *turn) left() {
-	*t--
+	*t = (*t - 1) % 8
 }
 
 func (t *turn) right() {
-	*t++
+	*t = (*t + 1) % 8
 }
 
 type Cords struct {

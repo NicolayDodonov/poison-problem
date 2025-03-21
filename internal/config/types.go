@@ -7,7 +7,7 @@ type Config struct {
 
 type Logger struct {
 	Type string `yaml:"type" env-required:"true"`
-	Path string `yaml:"type" env-required:"true"`
+	Path string `yaml:"path" env-required:"true"`
 }
 
 type Simulation struct {

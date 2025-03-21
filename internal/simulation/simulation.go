@@ -5,6 +5,7 @@ import (
 	"poison-problem/internal/config"
 	"poison-problem/internal/logger"
 	"poison-problem/internal/model"
+	"strings"
 )
 
 type Simulation struct {
@@ -28,13 +29,13 @@ func (s Simulation) Run() {
 		[2]int{25, 75},
 		50,
 		50,
-		50,
+		2,
 	}
 
-	switch s.Conf.Type {
-	case "Train":
+	switch strings.ToLower(s.Conf.Type) {
+	case "train":
 		s.train(s.Conf.TargetAge, sing)
-	case "Experiment":
+	case "experiment":
 		s.experiment(s.Conf.MaxEpoch)
 	}
 }

@@ -45,6 +45,7 @@ func (a *Agent) Run(w *World) error {
 	}
 	//take energy price
 	a.Energy--
+	a.Age++
 
 	//take the cell that the agent is looking at
 	cell, err := w.getCell(a.Cords.getCordsOnViewWithWorld(a.Look, w))
@@ -138,7 +139,11 @@ func (a *Agent) pollute(w *World) error {
 		w.Map[a.Cords.Y][a.Cords.X].PoisonLevel += a.MakePoison
 
 		if w.Map[a.Cords.Y][a.Cords.X].PoisonLevel > 50 {
-			a.Energy--
+			a.Energy -= 1
+		} else if w.Map[a.Cords.Y][a.Cords.X].PoisonLevel > 75 {
+			a.Energy -= 5
+		} else if w.Map[a.Cords.Y][a.Cords.X].PoisonLevel > 100 {
+			a.Energy -= 25
 		}
 
 		return nil
@@ -224,11 +229,11 @@ func (s *Sings) mutation(mutation int) {
 			}
 		case 7:
 			s.MakePoison += n
-			if s.MakePoison < 10 {
-				s.MakePoison = 10
+			if s.MakePoison < 1 {
+				s.MakePoison = 1
 			}
-			if s.MakePoison > 100 {
-				s.MakePoison = 100
+			if s.MakePoison > 10 {
+				s.MakePoison = 10
 			}
 		}
 	}
