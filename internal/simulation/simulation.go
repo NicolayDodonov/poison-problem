@@ -79,7 +79,7 @@ func (s Simulation) train(targetAge int, sings *model.Sing) {
 
 		// If the conditions are not met,
 		// we start mutation and select the best agents by age.
-		m.Fitness()
+		m.Fitness(targetAge)
 
 		//clear world and reset agent
 		m.Reset()

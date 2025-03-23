@@ -96,12 +96,31 @@ func (m *Model) Reset() {
 	}
 }
 
-func (m *Model) Fitness() {
-	//todo: get sings best agent.age
-	//todo: sort Agent to age
-	//todo: delete old agent
-	//todo: make new agent with best sings
+func (m *Model) Fitness(сountAgent int) {
+
+	//я думаю эта функция будет не раз и не два меня обманывать и плодить баги
+
+	sings := make([]*Sing, 8)
+	//sort agent to age
+	m.sort()
+	//get best agent age
+	for i := 0; i < сountAgent; i++ {
+		sings = append(sings, &m.Agents[i].Sing)
+	}
+	//delete old agent
+	m.Agents = nil
+	//make new agent with best sings
+	agents := make([]*Agent, сountAgent*len(sings))
+	for s := 0; s < len(sings); s++ {
+		for a := 0; a < сountAgent; a++ {
+			agents[s*a+a] = NewAgent(m.MaxX, m.MaxY, sings[s])
+		}
+	}
+	m.Agents = agents
 	//todo: mutation sings
+	for i := 0; i < сountAgent; i++ {
+		m.Agents[i].mutation(1)
+	}
 }
 
 func (m *Model) CheckTargetAge(target int) bool {
@@ -114,8 +133,13 @@ func (m *Model) CheckTargetAge(target int) bool {
 }
 
 func (m *Model) BestSing() *Sing {
-	//todo!
-	return nil
+	best := m.Agents[0]
+	for _, agent := range m.Agents {
+		if best.Age < agent.Age {
+			best = agent
+		}
+	}
+	return &best.Sing
 }
 
 func (m *Model) resourceHandler() {
@@ -188,5 +212,15 @@ func (m *Model) statisticHandler(updateGlobal bool) {
 		m.GetFood /= len(m.Agents)
 		m.GetPoison /= len(m.Agents)
 		m.MakePoison /= len(m.Agents)
+	}
+}
+
+func (m *Model) sort() {
+	for i := 0; i < len(m.Agents)-2; i++ {
+		for j := 0; j < len(m.Agents)-2-i; j++ {
+			if m.Agents[j+1].Age < m.Agents[j].Age {
+				m.Agents[j+1], m.Agents[j] = m.Agents[j], m.Agents[j+1]
+			}
+		}
 	}
 }

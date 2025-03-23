@@ -152,7 +152,7 @@ func (a *Agent) pollute(w *World) error {
 	}
 }
 
-func (s *Sing) mutation(mutation int) {
+func (s *Sing) mutation(count int) {
 	/*
 		0 	MoveOrAction int    //determinate gone of cell or make some action
 		1 	TurnOrMove   int    //determinate make turns or go ahead
@@ -162,7 +162,7 @@ func (s *Sing) mutation(mutation int) {
 		6 	GetPoison    int    //determinate count of eat poison
 		7 	MakePoison   int    //determinate count of produce poison
 	*/
-	for i := 0; i < mutation; i++ {
+	for i := 0; i < count; i++ {
 		var n int
 		if rand.IntN(2) == 1 {
 			n = 1
