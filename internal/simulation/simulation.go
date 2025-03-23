@@ -2,9 +2,8 @@ package simulation
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"github.com/ilyakaznacheev/cleanenv"
-	"log"
 	"os"
 	"poison-problem/internal/config"
 	"poison-problem/internal/logger"
@@ -17,10 +16,6 @@ type Simulation struct {
 	Log  *logger.Logger
 }
 
-type Sings struct {
-	Sings []*model.Sing
-}
-
 func New(logger *logger.Logger, Conf *config.Simulation) *Simulation {
 	return &Simulation{
 		Conf,
@@ -29,15 +24,24 @@ func New(logger *logger.Logger, Conf *config.Simulation) *Simulation {
 }
 
 func (s Simulation) Run() {
-	//todo: todo: sings := s.LoadSings()
-	sing := &model.Sing{
-		50,
-		50,
-		50,
-		[2]int{25, 75},
-		50,
-		50,
-		2,
+
+	//todo: rewrite this to many sings loader!
+	sing, err := s.loadSing()
+	if err != nil {
+		s.Log.Error(err.Error())
+
+	}
+	if sing == nil {
+		s.Log.Error("sing is empty! Load base sing.")
+		sing = &model.Sing{
+			50,
+			50,
+			50,
+			[2]int{25, 75},
+			50,
+			50,
+			2,
+		}
 	}
 
 	switch strings.ToLower(s.Conf.Type) {
@@ -51,7 +55,6 @@ func (s Simulation) Run() {
 }
 
 func (s Simulation) train(targetAge int, sings *model.Sing) {
-
 	// make model to train sings
 	m := model.New(
 		s.Conf.StartAgent,
@@ -60,14 +63,12 @@ func (s Simulation) train(targetAge int, sings *model.Sing) {
 		sings)
 
 	for {
-		//todo: m.ClearModel
-
 		// run one epoch model
 		// epoch end if all agent ded
 		m.Run(context.TODO(), s.Log, s.Conf.EndAgent)
 
 		// after end epoch - save statistic in file
-		if err := s.SaveStatistic(m.String()); err != nil {
+		if err := s.saveStat(m.String()); err != nil {
 			s.Log.Error(err.Error())
 		}
 
@@ -79,9 +80,14 @@ func (s Simulation) train(targetAge int, sings *model.Sing) {
 		// If the conditions are not met,
 		// we start mutation and select the best agents by age.
 		m.Fitness()
+
+		//clear world and reset agent
+		m.Reset()
 	}
 
-	s.SaveSing(&m.BestSing().String())
+	if err := s.saveSing(m.BestSing()); err != nil {
+		s.Log.Error(err.Error())
+	}
 }
 
 func (s Simulation) experiment(maxEpoch int) {
@@ -104,7 +110,7 @@ func (s Simulation) experiment(maxEpoch int) {
 	}
 }
 
-func (s Simulation) SaveStatistic(stat string) error {
+func (s Simulation) saveStat(stat string) error {
 	file, err := os.OpenFile(s.Conf.SaveStat, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
 		return err
@@ -117,28 +123,39 @@ func (s Simulation) SaveStatistic(stat string) error {
 	return nil
 }
 
-func (s Simulation) SaveSing(sing string) error {
-	file, err := os.OpenFile(s.Conf.SaveSing, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
+func (s Simulation) saveSing(sing *model.Sing) error {
+	data, err := json.Marshal(sing)
+	if err != nil {
+		return err
+	}
+
+	file, err := os.OpenFile(s.Conf.SaveStat, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 
-	if _, err = file.WriteString(sing); err != nil {
-		return err
-	}
+	_, _ = file.Write(data)
+
 	return nil
 }
 
-func (s Simulation) LoadStatistic() (*[]*model.Sing, error) {
+func (s Simulation) loadSing() (*model.Sing, error) {
 	if s.Conf.LoadSing == "" {
-		return nil, fmt.Errorf("cannot load sing file")
+		return nil, fmt.Errorf("cannot load sing, path is empty!")
 	}
 
-	var data Sings
-	if err := cleanenv.ReadConfig(s.Conf.LoadSing, &data); err != nil {
-		log.Fatalf("cannot read sing file: %s", err)
+	data, err := os.ReadFile(s.Conf.LoadSing)
+	if err != nil {
+		return nil, err
 	}
 
-	return &data.Sings, nil
+	var sing model.Sing
+
+	err = json.Unmarshal(data, &sing)
+	if err != nil {
+		return nil, err
+	}
+
+	return &sing, nil
 }

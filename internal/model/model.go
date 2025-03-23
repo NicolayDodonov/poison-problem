@@ -78,6 +78,24 @@ func (m *Model) Run(ctx context.Context, logger *logger.Logger, targetCountAgent
 	m.statisticHandler(true)
 }
 
+func (m *Model) Reset() {
+	//clear map from food and poison
+	for _, cells := range m.Map {
+		for _, cell := range cells {
+			cell.FoodLevel = 0
+			cell.PoisonLevel = 0
+		}
+	}
+	//todo: make all agent to base count
+	for _, agent := range m.Agents {
+		agent.Cords = Cords{Y: rand.IntN(m.MaxY), X: rand.IntN(m.MaxX)}
+		agent.Look = turn(rand.IntN(8))
+		agent.Energy = 100
+		agent.Age = 0
+
+	}
+}
+
 func (m *Model) Fitness() {
 	//todo: get sings best agent.age
 	//todo: sort Agent to age
@@ -95,7 +113,7 @@ func (m *Model) CheckTargetAge(target int) bool {
 	return false
 }
 
-func (m Model) BestSing() *Sing {
+func (m *Model) BestSing() *Sing {
 	//todo!
 	return nil
 }

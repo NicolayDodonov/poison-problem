@@ -53,8 +53,6 @@ func (c *Cords) getCordsOnView(t turn) *Cords {
 	return &n
 }
 
-//todo: change cords with t and w
-
 func (c *Cords) getCordsOnViewWithWorld(t turn, w *World) *Cords {
 	n := Cords{
 		c.X,

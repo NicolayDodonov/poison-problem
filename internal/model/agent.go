@@ -16,13 +16,13 @@ type Agent struct {
 }
 
 type Sing struct {
-	MoveOrAction int    //determinate gone of cell or make some action
-	TurnOrMove   int    //determinate make turns or go ahead
-	LeftOrRight  int    //determinate type of turns
-	EatOrClear   [2]int //determinate the range (0 to [0]) ([0] to [1]) and ([1] to 100)
-	GetFood      int    //determinate count of eat food
-	GetPoison    int    //determinate count of eat poison
-	MakePoison   int    //determinate count of produce poison
+	MoveOrAction int    `json:"move_or_action"` //determinate gone of cell or make some action
+	TurnOrMove   int    `json:"turn_or_move"`   //determinate make turns or go ahead
+	LeftOrRight  int    `json:"left_or_right"`  //determinate type of turns
+	EatOrClear   [2]int `json:"eat_or_clear"`   //determinate the range (0 to [0]) ([0] to [1]) and ([1] to 100)
+	GetFood      int    `json:"get_food"`       //determinate count of eat food
+	GetPoison    int    `json:"get_poison"`     //determinate count of eat poison
+	MakePoison   int    `json:"make_poison"`    //determinate count of produce poison
 }
 
 func NewAgent(MaxX, MaxY int, s *Sing) *Agent {
@@ -50,7 +50,7 @@ func (a *Agent) Run(w *World) error {
 	//take the cell that the agent is looking at
 	cell, err := w.getCell(a.Cords.getCordsOnViewWithWorld(a.Look, w))
 	if err != nil {
-		return fmt.Errorf("can't get cell on look, because ", err)
+		return fmt.Errorf("can't get cell on look, because %e", err)
 	}
 
 	if a.look(cell) {
@@ -59,7 +59,7 @@ func (a *Agent) Run(w *World) error {
 			//Action
 			err := a.action(cell)
 			if err != nil {
-				return fmt.Errorf("can't some action, because ", err)
+				return fmt.Errorf("can't some action, because %e", err)
 			}
 		} else {
 			//go out
@@ -72,7 +72,7 @@ func (a *Agent) Run(w *World) error {
 
 	err = a.pollute(w)
 	if err != nil {
-		return fmt.Errorf("can't pollute, because ", err)
+		return fmt.Errorf("can't pollute, because %e", err)
 	}
 
 	return nil
@@ -148,7 +148,7 @@ func (a *Agent) pollute(w *World) error {
 
 		return nil
 	} else {
-		return fmt.Errorf("out of world! X", a.Cords.X, "Y:", a.Cords.Y)
+		return fmt.Errorf("out of world! X: %q Y: %q", a.Cords.X, a.Cords.Y)
 	}
 }
 
