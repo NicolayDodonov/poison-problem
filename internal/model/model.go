@@ -18,7 +18,7 @@ type Parameters struct {
 	levelPoisonHalfFood int
 }
 
-func New(countAgent, worldX, worldY int, sings ...*Sings) *Model {
+func New(countAgent, worldX, worldY int, sings ...*Sing) *Model {
 	//init []*Agents
 	agents := make([]*Agent, countAgent*len(sings))
 	for s := 0; s < len(sings); s++ {
@@ -38,7 +38,7 @@ func New(countAgent, worldX, worldY int, sings ...*Sings) *Model {
 			0,
 			0,
 			0,
-			Sings{
+			Sing{
 				0, 0, 0, [2]int{0, 0}, 0, 0, 0,
 			},
 		},
@@ -86,10 +86,6 @@ func (m *Model) Fitness() {
 	//todo: mutation sings
 }
 
-func (m *Model) SaveStatistic() {
-	//todo: save Statistic in any place( log-file stat-file other-file)
-}
-
 func (m *Model) CheckTargetAge(target int) bool {
 	for _, agent := range m.Agents {
 		if agent.Age >= target {
@@ -97,6 +93,11 @@ func (m *Model) CheckTargetAge(target int) bool {
 		}
 	}
 	return false
+}
+
+func (m Model) BestSing() *Sing {
+	//todo!
+	return nil
 }
 
 func (m *Model) resourceHandler() {
@@ -140,7 +141,7 @@ func (m *Model) statisticHandler(updateGlobal bool) {
 	m.Statistic.AvgEnergy = sum / count
 
 	if updateGlobal {
-		m.Statistic.Sings = Sings{
+		m.Statistic.Sing = Sing{
 			0,
 			0,
 			0,

@@ -12,10 +12,10 @@ type Agent struct {
 	Age    int
 	Look   turn  //0 to 8
 	Cords  Cords //x y
-	Sings        //small gen model
+	Sing         //small gen model
 }
 
-type Sings struct {
+type Sing struct {
 	MoveOrAction int    //determinate gone of cell or make some action
 	TurnOrMove   int    //determinate make turns or go ahead
 	LeftOrRight  int    //determinate type of turns
@@ -25,7 +25,7 @@ type Sings struct {
 	MakePoison   int    //determinate count of produce poison
 }
 
-func NewAgent(MaxX, MaxY int, s *Sings) *Agent {
+func NewAgent(MaxX, MaxY int, s *Sing) *Agent {
 	return &Agent{
 		time.Now().Nanosecond(),
 		100,
@@ -152,7 +152,7 @@ func (a *Agent) pollute(w *World) error {
 	}
 }
 
-func (s *Sings) mutation(mutation int) {
+func (s *Sing) mutation(mutation int) {
 	/*
 		0 	MoveOrAction int    //determinate gone of cell or make some action
 		1 	TurnOrMove   int    //determinate make turns or go ahead

@@ -7,7 +7,7 @@ type Statistic struct {
 	Poison    int
 	AvgEnergy int
 	Year      int
-	Sings
+	Sing
 }
 
 func (s *Statistic) String() string {
