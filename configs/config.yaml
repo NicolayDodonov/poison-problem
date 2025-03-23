@@ -18,5 +18,5 @@ simulation:
   maxCountEpoch: 1000
   # пути сохранения данных
   pathLoadSing: ""
-  pathSaveSing: ""
-  pathSaveStat: ""
+  pathSaveSing: "saves/best-Sing.json"
+  pathSaveStat: "saves/stat-train.cvs"

@@ -129,7 +129,7 @@ func (s Simulation) saveSing(sing *model.Sing) error {
 		return err
 	}
 
-	file, err := os.OpenFile(s.Conf.SaveStat, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
+	file, err := os.OpenFile(s.Conf.SaveSing, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
 		return err
 	}

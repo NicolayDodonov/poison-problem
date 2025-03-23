@@ -50,7 +50,7 @@ func (a *Agent) Run(w *World) error {
 	//take the cell that the agent is looking at
 	cell, err := w.getCell(a.Cords.getCordsOnViewWithWorld(a.Look, w))
 	if err != nil {
-		return fmt.Errorf("can't get cell on look, because %e", err)
+		return fmt.Errorf("can't get cell on look, because %s", err)
 	}
 
 	if a.look(cell) {

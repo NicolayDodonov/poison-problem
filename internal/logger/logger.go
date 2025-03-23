@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"log"
 	"os"
 	"strings"
 	"time"
@@ -32,8 +33,7 @@ func (l *Logger) Error(str string) {
 	if l.Level <= Error {
 		t := time.Now()
 
-		msg := "[ERR] " + str + " Time:" + t.Format("02-01-2006 15:04:05")
-		_ = os.WriteFile(l.Path, []byte(msg), 0666)
+		l.write("[ERR] " + str + " Time:" + t.Format("02-01-2006 15:04:05"))
 	}
 }
 
@@ -41,8 +41,7 @@ func (l *Logger) Debug(str string) {
 	if l.Level <= Debug {
 		t := time.Now()
 
-		msg := "[DEB] " + str + " Time:" + t.Format("02-01-2006 15:04:05")
-		_ = os.WriteFile(l.Path, []byte(msg), 0666)
+		l.write("[DEB] " + str + " Time:" + t.Format("02-01-2006 15:04:05"))
 	}
 }
 
@@ -50,8 +49,20 @@ func (l *Logger) Info(str string) {
 	if l.Level <= Info {
 		t := time.Now()
 
-		msg := "[INF] " + str + " Time:" + t.Format("02-01-2006 15:04:05")
-		_ = os.WriteFile(l.Path, []byte(msg), 0666)
+		l.write("[INF] " + str + " Time:" + t.Format("02-01-2006 15:04:05"))
+	}
+}
+
+// it is not good realisation of write to log file, but
+func (l *Logger) write(msg string) {
+	f, err := os.OpenFile(l.Path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	if _, err = f.WriteString(msg + "\n"); err != nil {
+		//it not stable!!!!!!!!!!!!!!!
+		log.Printf(err.Error())
 	}
 }
 
