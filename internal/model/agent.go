@@ -3,11 +3,10 @@ package model
 import (
 	"fmt"
 	"math/rand/v2"
-	"time"
 )
 
 type Agent struct {
-	ID     int
+	ID     string
 	Energy int
 	Age    int
 	Look   turn  //0 to 8
@@ -25,9 +24,9 @@ type Sing struct {
 	MakePoison   int    `json:"make_poison"`    //determinate count of produce poison
 }
 
-func NewAgent(MaxX, MaxY int, s *Sing) *Agent {
+func NewAgent(MaxX, MaxY int, id string, s *Sing) *Agent {
 	return &Agent{
-		time.Now().Nanosecond(),
+		id,
 		100,
 		0,
 		0,
@@ -50,7 +49,7 @@ func (a *Agent) Run(w *World) error {
 	//take the cell that the agent is looking at
 	cell, err := w.getCell(a.Cords.getCordsOnViewWithWorld(a.Look, w))
 	if err != nil {
-		return fmt.Errorf("can't get cell on look, because %s", err)
+		return nil
 	}
 
 	if a.look(cell) {

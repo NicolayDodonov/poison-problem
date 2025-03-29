@@ -25,11 +25,14 @@ func New(logger *logger.Logger, Conf *config.Simulation) *Simulation {
 
 func (s Simulation) Run() {
 
+	s.Log.Info("Simulation init")
+
 	//todo: rewrite this to many sings loader!
 	sing, err := s.loadSing()
 	if err != nil {
 		s.Log.Error(err.Error())
-
+	} else {
+		s.Log.Info("Sings loaded")
 	}
 	if sing == nil {
 		s.Log.Error("sing is empty! Load base sing.")
@@ -46,15 +49,19 @@ func (s Simulation) Run() {
 
 	switch strings.ToLower(s.Conf.Type) {
 	case "train":
+		s.Log.Info("Start train")
 		//todo: and run len(sings) train with 1 sing
 		s.train(s.Conf.TargetAge, sing)
 	case "experiment":
+		s.Log.Info("Start experiment")
 		//todo: and run 1 experiment with all sings
 		s.experiment(s.Conf.MaxEpoch)
 	}
+	s.Log.Info("Simulation end")
 }
 
 func (s Simulation) train(targetAge int, sings *model.Sing) {
+	s.Log.Debug("Init model")
 	// make model to train sings
 	m := model.New(
 		s.Conf.StartAgent,
@@ -77,10 +84,12 @@ func (s Simulation) train(targetAge int, sings *model.Sing) {
 			break
 		}
 
+		s.Log.Debug("Start fitness function")
 		// If the conditions are not met,
 		// we start mutation and select the best agents by age.
 		m.Fitness(targetAge)
 
+		s.Log.Debug("Reset model")
 		//clear world and reset agent
 		m.Reset()
 	}

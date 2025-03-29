@@ -26,14 +26,17 @@ func New(path, level string) *Logger {
 		//if file log is not found - create!
 		_, _ = os.Create(path)
 	}
-	return &Logger{path, convert(level)}
+	l := &Logger{path, convert(level)}
+	l.write("+====================+")
+	l.Info("Logger Init")
+	return l
 }
 
 func (l *Logger) Error(str string) {
 	if l.Level <= Error {
 		t := time.Now()
 
-		l.write("[ERR] " + str + " Time:" + t.Format("02-01-2006 15:04:05"))
+		l.write("[ERR] " + str + "; Time:" + t.Format("02-01-2006 15:04:05"))
 	}
 }
 
@@ -41,7 +44,7 @@ func (l *Logger) Debug(str string) {
 	if l.Level <= Debug {
 		t := time.Now()
 
-		l.write("[DEB] " + str + " Time:" + t.Format("02-01-2006 15:04:05"))
+		l.write("[DEB] " + str + "; Time:" + t.Format("02-01-2006 15:04:05"))
 	}
 }
 
@@ -49,7 +52,7 @@ func (l *Logger) Info(str string) {
 	if l.Level <= Info {
 		t := time.Now()
 
-		l.write("[INF] " + str + " Time:" + t.Format("02-01-2006 15:04:05"))
+		l.write("[INF] " + str + "; Time:" + t.Format("02-01-2006 15:04:05"))
 	}
 }
 

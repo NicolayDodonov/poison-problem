@@ -14,7 +14,10 @@ func main() {
 		Config.Logger.Path,
 		Config.Logger.Type)
 
+	Logger.Info("Application start")
 	Simulation := s.New(Logger, &Config.Simulation)
 
 	Simulation.Run()
+
+	Logger.Info("Application shut down without errors")
 }

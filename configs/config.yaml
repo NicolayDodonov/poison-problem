@@ -1,7 +1,7 @@
 # Настройка конфига
 logger:
   # тип логгера Debug|Info|Error|Off
-  type: "Error"
+  type: "Info"
   # путь к сохранению логов
   path: "logs/app.log"
 # Настройка Симуляции

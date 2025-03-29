@@ -4,6 +4,7 @@ import (
 	"context"
 	"math/rand/v2"
 	"poison-problem/internal/logger"
+	"strconv"
 )
 
 type Model struct {
@@ -23,7 +24,11 @@ func New(countAgent, worldX, worldY int, sings ...*Sing) *Model {
 	agents := make([]*Agent, countAgent*len(sings))
 	for s := 0; s < len(sings); s++ {
 		for a := 0; a < countAgent; a++ {
-			agents[s*a+a] = NewAgent(worldX, worldY, sings[s])
+			agents[s*a+a] = NewAgent(
+				worldX,
+				worldY,
+				strconv.Itoa(s)+"-"+strconv.Itoa(a),
+				sings[s])
 		}
 	}
 
@@ -52,30 +57,37 @@ func New(countAgent, worldX, worldY int, sings ...*Sing) *Model {
 // Run starts one epoch of agent life simulation.
 // The epoch ends when the number of live agents is <= targetCountAgent.
 func (m *Model) Run(ctx context.Context, logger *logger.Logger, targetCountAgent int) {
+	logger.Info("Model started")
 	for {
+		logger.Debug("age №" + strconv.Itoa(m.Year))
 		//update world resources
 		m.resourceHandler()
 
 		liveAgent := 0
 		//run all agent
 		for _, agent := range m.Agents {
+			logger.Debug("Run Agent №" + agent.ID)
 			err := agent.Run(m.World)
 			if err != nil {
 				logger.Error(err.Error())
 			}
 			if agent.Energy > 0 {
+				logger.Debug("His is live!")
 				liveAgent++
 			}
 		}
 
 		if liveAgent <= targetCountAgent {
+			logger.Debug("All agent is dead")
 			break
 		}
+		logger.Debug("Update stat")
 		//update model stat
 		m.statisticHandler(false)
 		m.Statistic.Year++
 	}
 	m.statisticHandler(true)
+	logger.Info("Model stopped")
 }
 
 func (m *Model) Reset() {
@@ -113,7 +125,11 @@ func (m *Model) Fitness(сountAgent int) {
 	agents := make([]*Agent, сountAgent*len(sings))
 	for s := 0; s < len(sings); s++ {
 		for a := 0; a < сountAgent; a++ {
-			agents[s*a+a] = NewAgent(m.MaxX, m.MaxY, sings[s])
+			agents[s*a+a] = NewAgent(
+				m.MaxX,
+				m.MaxY,
+				strconv.Itoa(s)+"-"+strconv.Itoa(a),
+				sings[s])
 		}
 	}
 	m.Agents = agents
