@@ -60,14 +60,14 @@ func (s Simulation) Run() {
 	s.Log.Info("Simulation end")
 }
 
-func (s Simulation) train(targetAge int, sings *model.Sing) {
+func (s Simulation) train(targetAge int, sing *model.Sing) {
 	s.Log.Debug("Init model")
 	// make model to train sings
 	m := model.New(
 		s.Conf.StartAgent,
 		20,
 		20,
-		sings)
+		[]*model.Sing{sing})
 
 	for {
 		// run one epoch model
@@ -100,17 +100,24 @@ func (s Simulation) train(targetAge int, sings *model.Sing) {
 }
 
 func (s Simulation) experiment(maxEpoch int) {
+	//load sings to make experiment
+	s.Log.Info("Load sings from file")
+	sings, err := s.loadSings()
+	if err != nil {
+		s.Log.Error(err.Error())
+		return
+	}
+
+	//start the experiment by repeating the set number of epochs
 	for epoch := 0; epoch < maxEpoch; epoch++ {
-		//todo: load sings from file
-		// sings := s.loadSings()
 
 		// make model to experiment
 		m := model.New(
 			100,
 			20,
 			20,
+			sings,
 		)
-		_ = m //todo: delete
 
 		m.Run(context.TODO(), s.Log, 0)
 
@@ -167,4 +174,10 @@ func (s Simulation) loadSing() (*model.Sing, error) {
 	}
 
 	return &sing, nil
+}
+
+func (s Simulation) loadSings() ([]*model.Sing, error) {
+
+	//todo
+	return nil, nil
 }

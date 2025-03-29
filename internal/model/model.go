@@ -19,7 +19,7 @@ type Parameters struct {
 	levelPoisonHalfFood int
 }
 
-func New(countAgent, worldX, worldY int, sings ...*Sing) *Model {
+func New(countAgent, worldX, worldY int, sings []*Sing) *Model {
 	//init []*Agents
 	agents := make([]*Agent, countAgent*len(sings))
 	for s := 0; s < len(sings); s++ {
