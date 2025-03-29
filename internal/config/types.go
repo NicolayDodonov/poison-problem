@@ -15,8 +15,8 @@ type Simulation struct {
 	TargetAge  int    `yaml:"targetAge"`
 	StartAgent int    `yaml:"startCountAgent"`
 	EndAgent   int    `yaml:"endCountAgent"`
-	MaxEpoch   int    `yaml:"maxCountEpoch"`
 	LoadSing   string `yaml:"pathLoadSing"`
+	LoadSings  string `yaml:"pathLoadSings"`
 	SaveSing   string `yaml:"pathSaveSing"`
 	SaveStat   string `yaml:"pathSaveStat"`
 }

@@ -27,36 +27,47 @@ func (s Simulation) Run() {
 
 	s.Log.Info("Simulation init")
 
-	//todo: rewrite this to many sings loader!
-	sing, err := s.loadSing()
-	if err != nil {
-		s.Log.Error(err.Error())
-	} else {
-		s.Log.Info("Sings loaded")
-	}
-	if sing == nil {
-		s.Log.Error("sing is empty! Load base sing.")
-		sing = &model.Sing{
-			50,
-			50,
-			50,
-			[2]int{25, 75},
-			50,
-			50,
-			2,
-		}
-	}
-
 	switch strings.ToLower(s.Conf.Type) {
 	case "train":
 		s.Log.Info("Start train")
-		//todo: and run len(sings) train with 1 sing
+
+		//load one sing from file
+		sing, err := s.loadSing()
+		if err != nil {
+			s.Log.Error(err.Error())
+		} else {
+			s.Log.Info("Sing loaded")
+		}
+		//if load sing is empty, set base sing
+		if sing == nil {
+			s.Log.Error("sing is empty! Load base sing.")
+			sing = &model.Sing{
+				50,
+				50,
+				50,
+				[2]int{25, 75},
+				50,
+				50,
+				2,
+			}
+		}
+		//start train model
 		s.train(s.Conf.TargetAge, sing)
+
 	case "experiment":
 		s.Log.Info("Start experiment")
-		//todo: and run 1 experiment with all sings
-		s.experiment(s.Conf.MaxEpoch)
+
+		//load many sings from file
+		s.Log.Info("Load sings from file")
+		sings, err := s.loadSings()
+		if err != nil {
+			s.Log.Error(err.Error())
+			return
+		}
+		//start make experiment
+		s.experiment(sings)
 	}
+
 	s.Log.Info("Simulation end")
 }
 
@@ -72,7 +83,7 @@ func (s Simulation) train(targetAge int, sing *model.Sing) {
 	for {
 		// run one epoch model
 		// epoch end if all agent ded
-		m.Run(context.TODO(), s.Log, s.Conf.EndAgent)
+		m.Run(context.TODO(), s.Log, s.Conf.EndAgent, foodPoisonCounter, avgCounter)
 
 		// after end epoch - save statistic in file
 		if err := s.saveStat(m.String()); err != nil {
@@ -99,31 +110,17 @@ func (s Simulation) train(targetAge int, sing *model.Sing) {
 	}
 }
 
-func (s Simulation) experiment(maxEpoch int) {
-	//load sings to make experiment
-	s.Log.Info("Load sings from file")
-	sings, err := s.loadSings()
-	if err != nil {
-		s.Log.Error(err.Error())
-		return
-	}
-
-	//start the experiment by repeating the set number of epochs
-	for epoch := 0; epoch < maxEpoch; epoch++ {
-
-		// make model to experiment
-		m := model.New(
-			100,
-			20,
-			20,
-			sings,
-		)
-
-		m.Run(context.TODO(), s.Log, 0)
-
-		//get ifo about of all sings group
-		//todo: m.GetCountStatistic
-	}
+func (s Simulation) experiment(sings []*model.Sing) {
+	//init model
+	m := model.New(
+		100,
+		20,
+		20,
+		sings,
+	)
+	//run model
+	m.Run(context.TODO(), s.Log, 0, singsCounter, todoHandler)
+	s.Log.Info("Finished experiment")
 }
 
 func (s Simulation) saveStat(stat string) error {
@@ -158,7 +155,7 @@ func (s Simulation) saveSing(sing *model.Sing) error {
 
 func (s Simulation) loadSing() (*model.Sing, error) {
 	if s.Conf.LoadSing == "" {
-		return nil, fmt.Errorf("cannot load sing, path is empty!")
+		return nil, fmt.Errorf("cannot load sing, path is empty")
 	}
 
 	data, err := os.ReadFile(s.Conf.LoadSing)
@@ -177,7 +174,25 @@ func (s Simulation) loadSing() (*model.Sing, error) {
 }
 
 func (s Simulation) loadSings() ([]*model.Sing, error) {
+	if s.Conf.LoadSings == "" {
+		return nil, fmt.Errorf("cannot load sings, path is empty!")
+	}
 
-	//todo
-	return nil, nil
+	data, err := os.ReadFile(s.Conf.LoadSings)
+	if err != nil {
+		return nil, err
+	}
+
+	type array struct {
+		Sings []*model.Sing `json:"sings"`
+	}
+
+	sings := array{}
+
+	err = json.Unmarshal(data, &sings)
+	if err != nil {
+		return nil, err
+	}
+
+	return sings.Sings, nil
 }

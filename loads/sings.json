@@ -1,0 +1,31 @@
+{
+  "sings": [
+    {
+      "move_or_action":50,
+      "turn_or_move":50,
+      "left_or_right":50,
+      "eat_or_clear":[25,75],
+      "get_food":50,
+      "get_poison":50,
+      "make_poison":2
+    },
+    {
+      "move_or_action":50,
+      "turn_or_move":50,
+      "left_or_right":50,
+      "eat_or_clear":[25,75],
+      "get_food":50,
+      "get_poison":50,
+      "make_poison":2
+    },
+    {
+      "move_or_action":50,
+      "turn_or_move":50,
+      "left_or_right":50,
+      "eat_or_clear":[25,75],
+      "get_food":50,
+      "get_poison":50,
+      "make_poison":2
+    }
+  ]
+}

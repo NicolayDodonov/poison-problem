@@ -1,22 +1,21 @@
 # Настройка конфига
 logger:
   # тип логгера Debug|Info|Error|Off
-  type: "Debug"
+  type: "Info"
   # путь к сохранению логов
   path: "logs/app.log"
 # Настройка Симуляции
 simulation:
   # тип симуляции Train|Experiment
-  type: "train"
+  type: "Experiment"
   # до какого возраста обучать
   targetAge: 100
   # колличество агентов для обучения
   startCountAgent: 64
   # колличество лучших в эпохе
   endCountAgent: 8
-  # сколько эпох длится эксперимент
-  maxCountEpoch: 1000
   # пути сохранения данных
-  pathLoadSing: ""
+  pathLoadSing: "loads/sing.json"
+  pathLoadSings: "loads/sings.json"
   pathSaveSing: "saves/best-Sing.json"
-  pathSaveStat: "saves/stat-train.cvs"
+  pathSaveStat: "saves/stat-train.csv"
