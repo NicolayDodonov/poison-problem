@@ -1,7 +1,7 @@
 # Настройка конфига
 logger:
   # тип логгера Debug|Info|Error|Off
-  type: "Info"
+  type: "Debug"
   # путь к сохранению логов
   path: "logs/app.log"
 # Настройка Симуляции
@@ -11,7 +11,7 @@ simulation:
   # до какого возраста обучать
   targetAge: 100
   # колличество агентов для обучения
-  startCountAgent: 64
+  startCountAgent: 20
   # колличество лучших в эпохе
   endCountAgent: 8
   # пути сохранения данных

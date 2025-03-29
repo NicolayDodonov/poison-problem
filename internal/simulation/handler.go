@@ -71,6 +71,9 @@ func avgCounter(m *model.Model) {
 func singsCounter(m *model.Model) {
 	//make map
 	s := make(map[string]int)
+	for i := 0; i < m.Parameters.CountSings; i++ {
+		s[strconv.Itoa(i)] = 0
+	}
 	//range all agent in model
 	for _, agent := range m.Agents {
 		//if agent live - save data about this agent
@@ -87,18 +90,21 @@ func singsCounter(m *model.Model) {
 	}
 	//convert s to string
 	sb := strings.Builder{}
-	for _, value := range s {
-		sb.WriteString(strconv.Itoa(value) + "; ")
+	for i := 0; i < m.Parameters.CountSings; i++ {
+		sb.WriteString(strconv.Itoa(s[strconv.Itoa(i)]) + "; ")
 	}
+	sb.WriteString("\n")
 
 	//open file
 	f, _ := os.OpenFile("saves/experiment.csv", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	defer f.Close()
 
 	//save data
-	if _, err := f.WriteString(sb.String()); err != nil {
+	msg := sb.String()
+
+	if _, err := f.WriteString(msg); err != nil {
 		//it not stable!!!!!!!!!!!!!!!
-		log.Printf(err.Error())
+		log.Printf("singsCounter " + err.Error())
 	}
 }
 

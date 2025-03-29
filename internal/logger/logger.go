@@ -65,7 +65,7 @@ func (l *Logger) write(msg string) {
 	defer f.Close()
 	if _, err = f.WriteString(msg + "\n"); err != nil {
 		//it not stable!!!!!!!!!!!!!!!
-		log.Printf(err.Error())
+		log.Printf("Logger error " + err.Error())
 	}
 }
 

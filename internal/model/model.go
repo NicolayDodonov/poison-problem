@@ -17,19 +17,26 @@ type Model struct {
 type Parameters struct {
 	chanceFoodAppearing int
 	levelPoisonHalfFood int
+	CountSings          int
 }
 
 func New(countAgent, worldX, worldY int, sings []*Sing) *Model {
-	//init []*Agents
-	agents := make([]*Agent, countAgent*len(sings))
-	for s := 0; s < len(sings); s++ {
+	//make empty slice
+	agents := make([]*Agent, 0)
+
+	//fill agents
+	for s, sing := range sings {
+		group := make([]*Agent, countAgent)
+		//fill group agent
 		for a := 0; a < countAgent; a++ {
-			agents[s*a+a] = NewAgent(
+			group[a] = NewAgent(
 				worldX,
 				worldY,
 				strconv.Itoa(s)+"-"+strconv.Itoa(a),
-				sings[s])
+				sing,
+			)
 		}
+		agents = append(agents, group...)
 	}
 
 	//init World
@@ -50,6 +57,7 @@ func New(countAgent, worldX, worldY int, sings []*Sing) *Model {
 		&Parameters{
 			25,
 			50,
+			len(sings),
 		},
 	}
 }

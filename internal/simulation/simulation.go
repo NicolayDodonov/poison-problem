@@ -113,7 +113,7 @@ func (s Simulation) train(targetAge int, sing *model.Sing) {
 func (s Simulation) experiment(sings []*model.Sing) {
 	//init model
 	m := model.New(
-		100,
+		s.Conf.StartAgent,
 		20,
 		20,
 		sings,
