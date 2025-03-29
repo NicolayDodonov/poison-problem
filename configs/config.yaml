@@ -1,6 +1,7 @@
-# Настройка конфига
+# Настройка логгера
 logger:
   # тип логгера Debug|Info|Error|Off
+  # понижение логгера от Off к Debug замедляет программу
   type: "Debug"
   # путь к сохранению логов
   path: "logs/app.log"
@@ -8,17 +9,20 @@ logger:
 simulation:
   # тип симуляции Train|Experiment
   type: "Experiment"
-  # до какого возраста обучать
+  # Если тип симуляции Train: до какого возраста обучать
   targetAge: 100
-  # колличество агентов для обучения
-  startCountAgent: 20
-  # колличество лучших в эпохе
+  # Если тип симуляции Train: колличество лучших в эпохе
   endCountAgent: 8
+  # стартовое колличество агентов одной стратегии(Sing)
+  startCountAgent: 20
+  # Если тип симуляции Experiment: 
   # максимальный срок проведения эксперимента
   # -1 в значении - нет ограничений
   maxAgeExperiment: -1
-  # пути сохранения данных
+  # адрес загрузки одной стратегии для обучения(Train)
   pathLoadSing: "loads/sing.json"
+  # адрес загрузки нескольких стратегий для эксперимента(Experiment)
   pathLoadSings: "loads/sings.json"
+  # адреса выгрузки лучшей стратегии и статистики после обучения(Train) 
   pathSaveSing: "saves/best-Sing.json"
   pathSaveStat: "saves/stat-train.csv"
