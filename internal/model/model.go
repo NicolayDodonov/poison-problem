@@ -66,13 +66,12 @@ func (m *Model) Run(ctx context.Context, logger *logger.Logger, targetCountAgent
 		liveAgent := 0
 		//run all agent
 		for _, agent := range m.Agents {
-			logger.Debug("Run Agent №" + agent.ID)
 			err := agent.Run(m.World)
 			if err != nil {
-				logger.Error(err.Error())
+				logger.Error("Agent №" + agent.ID + " have error " + err.Error())
 			}
 			if agent.Energy > 0 {
-				logger.Debug("His is live!")
+				logger.Debug("Agent №" + agent.ID + " is live!")
 				liveAgent++
 			}
 		}

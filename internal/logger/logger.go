@@ -36,7 +36,7 @@ func (l *Logger) Error(str string) {
 	if l.Level <= Error {
 		t := time.Now()
 
-		l.write("[ERR] " + str + "; Time:" + t.Format("02-01-2006 15:04:05"))
+		l.write("[ERR] " + t.Format("02-01-2006 15:04:05") + "; " + str + ";")
 	}
 }
 
@@ -44,7 +44,7 @@ func (l *Logger) Debug(str string) {
 	if l.Level <= Debug {
 		t := time.Now()
 
-		l.write("[DEB] " + str + "; Time:" + t.Format("02-01-2006 15:04:05"))
+		l.write("[DEB] " + t.Format("02-01-2006 15:04:05") + "; " + str + ";")
 	}
 }
 
@@ -52,7 +52,7 @@ func (l *Logger) Info(str string) {
 	if l.Level <= Info {
 		t := time.Now()
 
-		l.write("[INF] " + str + "; Time:" + t.Format("02-01-2006 15:04:05"))
+		l.write("[INF] " + t.Format("02-01-2006 15:04:05") + "; " + str + ";")
 	}
 }
 
