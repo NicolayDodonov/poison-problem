@@ -67,6 +67,7 @@ func New(countAgent, worldX, worldY int, sings []*Sing) *Model {
 func (m *Model) Run(
 	ctx context.Context,
 	logger *logger.Logger,
+	maxAge,
 	targetCountAgent int,
 	handlerStat func(*Model),
 	handlerUpdate func(*Model),
@@ -98,6 +99,9 @@ func (m *Model) Run(
 		//update model stat
 		handlerStat(m)
 		m.Statistic.Year++
+		if m.Statistic.Year > maxAge && maxAge > 0 {
+			break
+		}
 	}
 	handlerUpdate(m)
 	logger.Info("Model stopped")

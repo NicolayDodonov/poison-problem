@@ -69,11 +69,16 @@ func avgCounter(m *model.Model) {
 // todo: make save date to file more standard
 // singsCounter counts live agents all Sing-group
 func singsCounter(m *model.Model) {
+	//use base handler
+	foodPoisonCounter(m)
+
 	//make map
 	s := make(map[string]int)
 	for i := 0; i < m.Parameters.CountSings; i++ {
 		s[strconv.Itoa(i)] = 0
 	}
+	s["food"] = m.Food
+	s["poison"] = m.Poison
 	//range all agent in model
 	for _, agent := range m.Agents {
 		//if agent live - save data about this agent
@@ -93,9 +98,31 @@ func singsCounter(m *model.Model) {
 	for i := 0; i < m.Parameters.CountSings; i++ {
 		sb.WriteString(strconv.Itoa(s[strconv.Itoa(i)]) + "; ")
 	}
+	sb.WriteString(strconv.Itoa(s["food"]) + "; ")
+	sb.WriteString(strconv.Itoa(s["poison"]) + "; ")
 	sb.WriteString("\n")
 
 	//open file
+	f, _ := os.OpenFile("saves/experiment.csv", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	defer f.Close()
+
+	//save data
+	msg := sb.String()
+
+	if _, err := f.WriteString(msg); err != nil {
+		//it not stable!!!!!!!!!!!!!!!
+		log.Printf("singsCounter " + err.Error())
+	}
+}
+
+func firstString(m *model.Model) {
+	sb := strings.Builder{}
+	for i := 0; i < m.Parameters.CountSings; i++ {
+		sb.WriteString("s-" + strconv.Itoa(i) + "; ")
+	}
+	sb.WriteString(" food;")
+	sb.WriteString(" poison;\n")
+
 	f, _ := os.OpenFile("saves/experiment.csv", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	defer f.Close()
 

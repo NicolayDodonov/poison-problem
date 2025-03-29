@@ -83,7 +83,7 @@ func (s Simulation) train(targetAge int, sing *model.Sing) {
 	for {
 		// run one epoch model
 		// epoch end if all agent ded
-		m.Run(context.TODO(), s.Log, s.Conf.EndAgent, foodPoisonCounter, avgCounter)
+		m.Run(context.TODO(), s.Log, s.Conf.MaxAge, s.Conf.EndAgent, foodPoisonCounter, avgCounter)
 
 		// after end epoch - save statistic in file
 		if err := s.saveStat(m.String()); err != nil {
@@ -119,7 +119,8 @@ func (s Simulation) experiment(sings []*model.Sing) {
 		sings,
 	)
 	//run model
-	m.Run(context.TODO(), s.Log, 0, singsCounter, todoHandler)
+	firstString(m)
+	m.Run(context.TODO(), s.Log, s.Conf.MaxAge, 0, singsCounter, todoHandler)
 	s.Log.Info("Finished experiment")
 }
 

@@ -14,6 +14,9 @@ simulation:
   startCountAgent: 20
   # колличество лучших в эпохе
   endCountAgent: 8
+  # максимальный срок проведения эксперимента
+  # -1 в значении - нет ограничений
+  maxAgeExperiment: -1
   # пути сохранения данных
   pathLoadSing: "loads/sing.json"
   pathLoadSings: "loads/sings.json"

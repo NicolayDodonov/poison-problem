@@ -15,6 +15,7 @@ type Simulation struct {
 	TargetAge  int    `yaml:"targetAge"`
 	StartAgent int    `yaml:"startCountAgent"`
 	EndAgent   int    `yaml:"endCountAgent"`
+	MaxAge     int    `yaml:"maxAgeExperiment"`
 	LoadSing   string `yaml:"pathLoadSing"`
 	LoadSings  string `yaml:"pathLoadSings"`
 	SaveSing   string `yaml:"pathSaveSing"`
