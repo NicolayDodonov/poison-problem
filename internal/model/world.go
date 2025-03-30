@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"poison-problem/internal/config"
 )
 
 type World struct {
@@ -17,18 +18,18 @@ type Cell struct {
 
 type Map [][]*Cell
 
-func NewWorld(x, y int) *World {
-	Map := make(Map, y)
-	for u := 0; u < y; u++ {
-		Map[u] = make([]*Cell, x)
-		for v := 0; v < x; v++ {
+func NewWorld(conf *config.World) *World {
+	Map := make(Map, conf.MaxY)
+	for u := 0; u < conf.MaxY; u++ {
+		Map[u] = make([]*Cell, conf.MaxX)
+		for v := 0; v < conf.MaxX; v++ {
 			Map[u][v] = &Cell{
 				FoodLevel:   0,
-				PoisonLevel: 0,
+				PoisonLevel: conf.PoisonLevel,
 			}
 		}
 	}
-	return &World{x, y, Map}
+	return &World{conf.MaxX, conf.MaxY, Map}
 }
 
 func (w *World) clear() {

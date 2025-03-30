@@ -26,3 +26,10 @@ simulation:
   # адреса выгрузки лучшей стратегии и статистики после обучения(Train) 
   pathSaveSing: "saves/best-Sing.json"
   pathSaveStat: "saves/stat-train.csv"
+  # Настройка мира
+  world:
+    # линейные размеры мира
+    x_size: 20
+    y_size: 20
+    # стартовое значение яда в каждой клетке
+    startPoisonLevel: 120

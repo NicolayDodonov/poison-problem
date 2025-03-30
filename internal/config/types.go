@@ -20,4 +20,11 @@ type Simulation struct {
 	LoadSings  string `yaml:"pathLoadSings"`
 	SaveSing   string `yaml:"pathSaveSing"`
 	SaveStat   string `yaml:"pathSaveStat"`
+	World      `yaml:"world" env-required:"true"`
+}
+
+type World struct {
+	MaxX        int `yaml:"x_size" env-required:"true"`
+	MaxY        int `yaml:"y_size" env-required:"true"`
+	PoisonLevel int `yaml:"startPoisonLevel"`
 }

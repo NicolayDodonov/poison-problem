@@ -3,6 +3,7 @@ package model
 import (
 	"context"
 	"math/rand/v2"
+	"poison-problem/internal/config"
 	"poison-problem/internal/logger"
 	"strconv"
 )
@@ -20,7 +21,7 @@ type Parameters struct {
 	CountSings          int
 }
 
-func New(countAgent, worldX, worldY int, sings []*Sing) *Model {
+func New(countAgent int, conf *config.World, sings []*Sing) *Model {
 	//make empty slice
 	agents := make([]*Agent, 0)
 
@@ -30,8 +31,8 @@ func New(countAgent, worldX, worldY int, sings []*Sing) *Model {
 		//fill group agent
 		for a := 0; a < countAgent; a++ {
 			group[a] = NewAgent(
-				worldX,
-				worldY,
+				conf.MaxX,
+				conf.MaxY,
 				strconv.Itoa(s)+"-"+strconv.Itoa(a),
 				sing,
 			)
@@ -40,7 +41,7 @@ func New(countAgent, worldX, worldY int, sings []*Sing) *Model {
 	}
 
 	//init World
-	world := NewWorld(worldX, worldY)
+	world := NewWorld(conf)
 
 	return &Model{
 		agents,
