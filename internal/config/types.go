@@ -27,4 +27,6 @@ type World struct {
 	MaxX        int `yaml:"x_size" env-required:"true"`
 	MaxY        int `yaml:"y_size" env-required:"true"`
 	PoisonLevel int `yaml:"startPoisonLevel"`
+	MaxLevel    int `yaml:"maxPoisonLevel"`
+	ChanceFood  int `yaml:"chanceToNewFood"`
 }

@@ -31,5 +31,8 @@ simulation:
     # линейные размеры мира
     x_size: 20
     y_size: 20
-    # стартовое значение яда в каждой клетке
-    startPoisonLevel: 120
+    # стартовое и максимальное значение яда в каждой клетке
+    startPoisonLevel: 10
+    maxPoisonLevel: 120
+    # шанс появление еды в клетке от 0 до 10
+    chanceToNewFood: 50

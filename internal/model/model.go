@@ -17,7 +17,7 @@ type Model struct {
 
 type Parameters struct {
 	chanceFoodAppearing int
-	levelPoisonHalfFood int
+	maxPoisonLevel      int
 	CountSings          int
 }
 
@@ -56,8 +56,8 @@ func New(countAgent int, conf *config.World, sings []*Sing) *Model {
 			},
 		},
 		&Parameters{
-			25,
-			50,
+			conf.ChanceFood,
+			conf.MaxLevel,
 			len(sings),
 		},
 	}
@@ -126,7 +126,7 @@ func (m *Model) Reset() {
 	}
 }
 
-func (m *Model) Fitness(сountAgent int) {
+func (m *Model) Fitness(countAgent int) {
 
 	//я думаю эта функция будет не раз и не два меня обманывать и плодить баги
 
@@ -134,15 +134,15 @@ func (m *Model) Fitness(сountAgent int) {
 	//sort agent to age
 	m.sort()
 	//get best agent age
-	for i := 0; i < сountAgent; i++ {
+	for i := 0; i < countAgent; i++ {
 		sings = append(sings, &m.Agents[i].Sing)
 	}
 	//delete old agent
 	m.Agents = nil
 	//make new agent with best sings
-	agents := make([]*Agent, сountAgent*len(sings))
+	agents := make([]*Agent, countAgent*len(sings))
 	for s := 0; s < len(sings); s++ {
-		for a := 0; a < сountAgent; a++ {
+		for a := 0; a < countAgent; a++ {
 			agents[s*a+a] = NewAgent(
 				m.MaxX,
 				m.MaxY,
@@ -152,7 +152,7 @@ func (m *Model) Fitness(сountAgent int) {
 	}
 	m.Agents = agents
 	//todo: mutation sings
-	for i := 0; i < сountAgent; i++ {
+	for i := 0; i < countAgent; i++ {
 		m.Agents[i].mutation(1)
 	}
 }
@@ -179,11 +179,23 @@ func (m *Model) BestSing() *Sing {
 func (m *Model) resourceHandler() {
 	for _, cells := range m.Map {
 		for _, cell := range cells {
-			//if in cell much food - we half this food
-			if cell.PoisonLevel > m.levelPoisonHalfFood && cell.FoodLevel > 15 {
+
+			//если в клетке есть max отравление - убрать всё
+			if cell.PoisonLevel > m.maxPoisonLevel {
+				cell.FoodLevel = 0
+				continue
+			}
+			//если в клетке есть отравление /2 от максимального - оставить четверь
+			if cell.PoisonLevel > m.maxPoisonLevel/2 {
+				cell.FoodLevel /= 4
+				continue
+			}
+			//если в клетке есть отравление /4 от максимального, оставить половину
+			if cell.PoisonLevel > m.maxPoisonLevel/4 {
 				cell.FoodLevel /= 2
 				continue
 			}
+
 			//if cell have small food - add it with a certain chance
 			if cell.FoodLevel < 10 && rand.IntN(100) >= m.chanceFoodAppearing {
 				cell.FoodLevel += 10
